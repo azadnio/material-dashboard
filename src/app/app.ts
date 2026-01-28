@@ -16,10 +16,19 @@ import { CustomSidenav } from "./components/custom-sidenav/custom-sidenav";
       </button>
     </mat-toolbar>
     <mat-sidenav-container class="h-[calc(100vh-64px)]">
-      <mat-sidenav mode="side" opened [style.width.px]="navbarWidth()" class="bg-gray-100">
+      <mat-sidenav mode="side" opened [style.width]="navbarWidth()" class="bg-gray-100 transition-all duration-500 ease-in-out">
         <app-custom-sidenav [collaped]="collaped()" />
       </mat-sidenav>
-      <mat-sidenav-content [style.marginLeft.px]="navbarWidth()">
+      <mat-sidenav-content [style.marginLeft]="navbarWidth()" class="transition-all duration-500 ease-in-out">
+        <button matButton="elevated" >
+  Save Changes  <!-- Most important action -->
+</button>
+
+<!-- Secondary - Secondary action -->
+<button mat-button color="secondary">
+  Cancel  <!-- Less important action -->
+</button>
+
         <router-outlet />
       </mat-sidenav-content>
     </mat-sidenav-container>
@@ -29,5 +38,5 @@ import { CustomSidenav } from "./components/custom-sidenav/custom-sidenav";
 export class App {
   protected readonly title = signal('material-dashboard');
   collaped = signal(false);
-  navbarWidth = computed(() => (this.collaped() ? 65 : 256));
+  navbarWidth = computed(() => (this.collaped() ? '65px' : '256px'));
 }

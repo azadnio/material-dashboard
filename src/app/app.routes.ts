@@ -12,7 +12,21 @@ export const routes: Routes = [
     },
     {
         path: 'content',
-        loadComponent: () => import('./pages/content/content')
+        loadComponent: () => import('./pages/content/content'),
+        children: [
+            {
+                path: 'articles',
+                loadComponent: () => import('./pages/content/articles/articles')
+            },
+            {
+                path: 'categories',
+                loadComponent: () => import('./pages/content/categories/categories')
+            },
+            {
+                path: 'tags',
+                loadComponent: () => import('./pages/content/tags/tags'),                
+            }
+        ]
     },
     {
         path: 'analytics',

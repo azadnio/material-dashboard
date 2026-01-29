@@ -2,8 +2,10 @@
 
 @import 'tailwindcss';
 
-/* @layer components { */
   .active-link {
     @apply border-blue-500 bg-gray-300;
   }
-/* } */
+
+  .cdk-drop-list-dragging {
+    opacity: 0.5;
+  }

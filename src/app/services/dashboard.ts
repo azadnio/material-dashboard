@@ -5,6 +5,7 @@ import { Views } from '../pages/dashboard/widgets/views';
 import { WatchTime } from '../pages/dashboard/widgets/watch-time';
 import { Revenue } from '../pages/dashboard/widgets/revenue';
 import { Analytics } from '../pages/dashboard/widgets/analytics';
+import { PieChart } from '../pages/dashboard/widgets/pie-chart';
 
 @Injectable()
 export class Dashboard {
@@ -15,6 +16,7 @@ export class Dashboard {
     { id: '3', label: 'Watch time', content: WatchTime, rows: 1, cols: 1, backgroundColor: '#003f5c', textColor: 'whitesmoke' },
     { id: '4', label: 'Revenue', content: Revenue, rows: 1, cols: 1, backgroundColor: '#003f5c', textColor: 'whitesmoke' },
     { id: '5', label: 'Analytics', content: Analytics, rows: 2, cols: 2 },
+    { id: '6', label: 'Pie Chart', content: PieChart, rows: 2, cols: 1 },
   ]);
 
   addedWidget = signal<TWidget[]>([]);
@@ -60,6 +62,19 @@ export class Dashboard {
       if (index <= 0) return widgets;
       const newWidgets = [...widgets];
       [newWidgets[index], newWidgets[index - 1]] = [newWidgets[index - 1], newWidgets[index]];
+      return newWidgets;
+    });
+  }
+
+  updateWidgetPosition(sourceWidgetId: string, targetWidgetId: string) {
+
+    this.addedWidget.update(widgets => {
+      const sourceIndex = widgets.findIndex(w => w.id === sourceWidgetId);
+      const targetIndex = widgets.findIndex(w => w.id === targetWidgetId);
+      if (sourceIndex < 0 || targetIndex < 0) return widgets;
+      const newWidgets = [...widgets];
+      const [movedWidget] = newWidgets.splice(sourceIndex, 1);
+      newWidgets.splice(targetIndex, 0, movedWidget);
       return newWidgets;
     });
   }

@@ -4,11 +4,12 @@ import { Dashboard as DashboardService } from '../../services/dashboard';
 import { MatAnchor, MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { wrapGrid } from 'animate-css-grid'
+import { wrapGrid } from 'animate-css-grid';
+import { CdkDropListGroup, CdkDropList, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Widget, MatAnchor, MatIcon, MatButton, MatMenu, MatMenuItem, MatMenuTrigger],
+  imports: [Widget, MatAnchor, MatIcon, MatButton, MatMenu, MatMenuItem, MatMenuTrigger, CdkDropListGroup, CdkDropList],
   providers: [DashboardService],
   template: `
     <div class="flex justify-between items-center">
@@ -29,9 +30,9 @@ import { wrapGrid } from 'animate-css-grid'
         }
       </mat-menu>
     </div>
-    <div #dashboard class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] auto-rows-[150px] gap-2">
+    <div #dashboard class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] auto-rows-[150px] gap-2" cdkDropListGroup>
       @for (widgets of store.addedWidget(); track widgets.id; let last = $last; let first = $first) {
-        <app-widget [data]="widgets" [last]="last" [first]="first" />
+        <app-widget [data]="widgets" [last]="last" [first]="first" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="widgets.id"/>
       }
     </div>
   `,
@@ -47,5 +48,13 @@ export default class Dashboard implements OnInit {
     wrapGrid(this.dashboard().nativeElement, {
       duration: 300
     });
+  }
+
+  drop(event: CdkDragDrop<string>) {
+    const { previousContainer, container } = event;
+    if (previousContainer === container) {
+      return;
+    }
+    this.store.updateWidgetPosition(previousContainer.data, container.data);
   }
 }
